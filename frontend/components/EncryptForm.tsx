@@ -39,7 +39,7 @@ export default function EncryptForm({ password, onPasswordChange }: EncryptFormP
       setEncryptedMessage(data?.encoded ?? data?.ciphertext ?? "");
       showToast({ tone: "success", message: "Encrypted successfully." });
     } catch {
-      showToast({ tone: "error", message: "Encryption failed. Try again." });
+      showToast({ tone: "error", message: "Password must be at least 8 characters." });
     } finally {
       setLoading(false);
     }
