@@ -1,19 +1,4 @@
-version: '3.8'
-
 services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-    depends_on:
-      - backend
-    networks:
-      - bitcipher-network
-
   backend:
     build:
       context: ./backend
@@ -21,11 +6,24 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - FLASK_ENV=production
-      - FLASK_APP=run.py
-    networks:
-      - bitcipher-network
+      SECRET_KEY: ${SECRET_KEY}
+      FLASK_ENV: production
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+      SCRYPT_N: ${SCRYPT_N:-131072}
+      SCRYPT_R: ${SCRYPT_R:-8}
+      SCRYPT_P: ${SCRYPT_P:-1}
+    restart: unless-stopped
 
-networks:
-  bitcipher-network:
-    driver: bridge
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        BACKEND_URL: http://backend:5000
+    ports:
+      - "3000:3000"
+    environment:
+      BACKEND_URL: http://backend:5000
+    depends_on:
+      - backend
+    restart: unless-stopped

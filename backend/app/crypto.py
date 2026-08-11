@@ -68,7 +68,7 @@ def decrypt_text(encoded: str, password: str):
 
 
 def generate_password(length: int = 16, include_symbols: bool = True):
-    safe_length = max(4, min(16, int(length)))
+    safe_length = max(Config.PASSWORD_MIN_LENGTH, min(Config.PASSWORD_MAX_LENGTH, int(length)))
     alphabet = string.ascii_letters + string.digits
     if include_symbols:
         alphabet += "!@#$%^&*()"
