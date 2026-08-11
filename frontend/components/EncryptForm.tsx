@@ -30,9 +30,14 @@ export default function EncryptForm({ password, onPasswordChange }: EncryptFormP
   const handleEncrypt = async (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
     if (!plaintext.trim() || !password.trim()) {
-      showToast({ tone: "error", message: "Add text and password to encrypt." });
-      return;
-    }
+  showToast({ tone: "error", message: "Add text and password to encrypt." });
+  return;
+}
+
+if (password.length < 8) {
+  showToast({ tone: "error", message: "Password must be at least 8 characters." });
+  return;
+}
     try {
       setLoading(true);
       const { data } = await encrypt(plaintext.trim(), password);
