@@ -56,9 +56,7 @@ def decrypt():
     try:
         plaintext = decrypt_text(encoded, password)
     except Exception:
-        # Never leak whether it was a bad password vs. malformed
-        # ciphertext vs. tampering -- same generic error either way.
-        return jsonify({"error": "Decryption failed"}), 400
+       return jsonify({"success": False, "error": "Invalid password or encrypted text"})
 
     return jsonify({"plaintext": plaintext})
 

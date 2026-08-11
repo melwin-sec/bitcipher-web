@@ -38,8 +38,16 @@ export default function DecryptForm({ password, onPasswordChange }: DecryptFormP
     try {
       setLoading(true);
       const { data } = await decrypt(encryptedMessage.trim(), password);
-      setPlaintext(data?.plaintext ?? "");
-      showToast({ tone: "success", message: "Decryption successful." });
+
+if (data?.success === false) {
+  setPlaintext("");
+  setError("Invalid password or encrypted text.");
+  showToast({ tone: "error", message: "Invalid password or encrypted text." });
+  return;
+}
+
+setPlaintext(data?.plaintext ?? "");
+showToast({ tone: "success", message: "Decryption successful." });
     } catch {
       setPlaintext("");
       setError("Wrong password or invalid encrypted message. Decryption failed.");
